@@ -57,9 +57,10 @@ class Radio extends React.Component {
 
   componentDidMount() {
     const values = queryString.parse(this.props.location.search);
+    const storagePrefix = "https://galcomstorage.blob.core.windows.net/app-data";
 
     fetch(
-      `${process.env.PUBLIC_URL}/stations/${values.station}/${values.station}.json`
+      `${storagePrefix}/stations/${values.station}/${values.station}.json`
     )
       .then((j) => j.json())
       .then((config) => {
@@ -67,7 +68,10 @@ class Radio extends React.Component {
         config["streamUrl"] = chooseStreamUrl(config["streams"]);
         if (config["logo"] === "") {
           config["logo"] = "logos/default.png";
+        }else{
+          config["logo"] = `${storagePrefix}/${config['logo']}`;
         }
+    
         config["stationLogo"] = config["logo"];
 
         config["isOnline"] = isOnline(); // is the device online

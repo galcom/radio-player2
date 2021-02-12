@@ -39,7 +39,7 @@
         const station = params.get("station");
         document.querySelector(
           'link[rel="manifest"]'
-        ).href = `stations/${station}/manifest.json`;
+        ).href = `https://galcomstorage.blob.core.windows.net/app-data/stations/${values.station}/manifest.json`
       }, 100);
     </script>
   </body>
