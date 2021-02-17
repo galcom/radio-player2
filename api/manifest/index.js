@@ -1,13 +1,10 @@
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    const name = (req.query.name || (req.body && req.body.name));
-    const responseMessage = name
-        ? "Hello, " + name + ". This HTTP triggered function executed successfully."
-        : "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
-    const manifest = {
-        "short_name": name,
-        "name": name,
+    const station = (req.query.station || (req.body && req.body.station));
+    var manifest= {
+        "short_station": station,
+        "station": station,
         "icons": [
             {
             "src": "/android-chrome-192x192.png",
@@ -20,12 +17,19 @@ module.exports = async function (context, req) {
             "type": "image/png"
             }
         ],
-        "start_url": "/?station="+name,
+        "start_url": "/?station="+station,
         "display": "standalone",
         "theme_color": "#000000",
         "background_color": "#ffffff"
         };
 
+    try{
+        manifest = await (
+            fetch(`https://galcomstorage.blob.core.windows.net/app-data/stations/${station}/manifest.json`).
+                then(res => res.json()));
+    }catch(error){
+        context.warn("failed to fetch custom manifest for "+station+", using default manifest");
+    }
 
 
     context.res = {
