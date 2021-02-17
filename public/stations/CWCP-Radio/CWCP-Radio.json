@@ -1,0 +1,14 @@
+{
+  "name": "CWCP-Radio",
+  "website": "https://www.coppleswesterncape.ca/cwcp-radio.html",
+  "logo": "stations/CWCP-Radio/CWCP-Radio.png",
+  "foregroundColor": "#fcfcfc",
+  "backgroundColor": "#1c2228",
+  "streams": [
+    {
+      "url": "https://xstreamer.galcom.org:8443/CWCP-Radio",
+      "type": "audio/mpeg",
+      "icecast": "CWCP-Radio"
+    }
+  ]
+}
