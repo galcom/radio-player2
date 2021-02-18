@@ -1,0 +1,19 @@
+{
+  "name": "Emmanuel Bible College Radio",
+  "website": "https://www.emmanuelbiblecollege.ca/",
+  "logo": "stations/EmmanuelBibleCollegeCampusRadio/EmmanuelBibleCollegeCampusRadio.png",
+  "foregroundColor": "#fcfcfc",
+  "backgroundColor": "#1c2228",
+  "streams": [
+    {
+      "url": "https://xstreamer.galcom.org:8443/EmmanuelBibleCollegeCampusRadio",
+      "type": "audio/mpeg",
+      "icecast": "EmmanuelBibleCollegeCampusRadio"
+    },
+    {
+      "url": "https://xstreamer.galcom.org:8443/EmmanuelBibleCollegeCampusRadioOgg",
+      "type": "application/ogg",
+      "icecast": "EmmanuelBibleCollegeCampusRadioOgg"
+    }
+  ]
+}
