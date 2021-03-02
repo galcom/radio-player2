@@ -171,23 +171,25 @@ class Radio extends React.Component {
   render() {
     // render the radio
     return (
-      <Player
-        // player settings
-        streamUrl={this.state.streamUrl}
-        logo={this.state.logo}
-        stationLogo={this.state.logo}
-        foregroundColor={this.state.foregroundColor}
-        backgroundColor={this.state.backgroundColor}
-        // player controls
-        isOnline={this.state.isOnline}
-        isBroadcasting={this.state.isBroadcasting}
-        isPlaying={this.state.isPlaying}
-        isReady={this.state.isReady}
-        onReady={this.onReady}
-        onBuffer={this.onBuffer}
-        togglePlaying={this.togglePlaying}
-        onError={this.onError}
-      />
+
+        <Player
+          // player settings
+          streamUrl={this.state.streamUrl}
+          logo={this.state.logo}
+          stationLogo={this.state.logo}
+          foregroundColor={this.state.foregroundColor}
+          backgroundColor={this.state.backgroundColor}
+          // player controls
+          isOnline={this.state.isOnline}
+          isBroadcasting={this.state.isBroadcasting}
+          isPlaying={this.state.isPlaying}
+          isReady={this.state.isReady}
+          onReady={this.onReady}
+          onBuffer={this.onBuffer}
+          togglePlaying={this.togglePlaying}
+          onError={this.onError}
+        />
+
     );
   }
 }

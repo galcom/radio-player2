@@ -3,63 +3,53 @@ const fetch = require("node-fetch");
 const bodyParser = require('body-parser')
 const path = require('path');
 const app = express();
+const base64=require('base-64');
+const {DOMParser} = require("xmldom");
+const xmlToJson = require('xmltojson');
+
 console.log("server start");
+
+//hack to make xmltoJSON work on Node
+xmlToJson.stringToXML = (string) => new DOMParser().parseFromString(string, 'text/xml');
 
 const storagePrefix = "https://galcomstorage.blob.core.windows.net/app-data";
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/api/manifest', function (req, res) {
-  console.log("manifest called");
+app.get('/api/stationList', function (req, res) {
+  const username="admin";
+  const password ="Galcom1995";
+  const url = "http://138.197.152.25:8000/admin/stats";
 
-  const station = (req.query.station || (req.body && req.body.station));
-  console.log("station: "+station);
-  var manifest= {
-      "short_name": station,
-      "name": station,
-      "icons": [
-          {
-          "src": "/android-chrome-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-          },
-          {
-          "src": "/android-chrome-256x256.png",
-          "sizes": "256x256",
-          "type": "image/png"
-          }
-      ],
-      "start_url": "/?station="+station,
-      "display": "standalone",
-      "theme_color": "#000000",
-      "background_color": "#ffffff"
-      };
+  fetch(url, {
+            method:'GET', 
+            headers: {'Authorization': 'Basic ' + base64.encode(username+":"+password)},
+         })
+        .then((result) => result.text())
+        .then((data) =>{
+            //console.log("station list result: ",data);
+            const stationList = xmlToJson.parseString(data);
+            console.log("json station list: ",stationList.icestats[0].source);
+            const stations = stationList.icestats[0].source.map((source) =>{
+              return {
+                url: source.listenurl[0]._text,
+                name: source.server_name[0]._text,
+                type: source.server_type[0]._text
+              }
+            })
 
-    res.setHeader("Content-Type","application/json");
-      fetch(`${storagePrefix}/stations/${station}/manifest.json`).
-          then(res => res.json()). 
-          then(data =>{
+            console.log("statsion: ",stations);
+            
+            res.contentType("application/json");
+            res.send(stations);
 
-            //adjust paths for icons
-            if(data.icons != null){
-              data.icons.forEach(icon => {
-                if(icon.src != null){
-                  icon.src = `${storagePrefix}/${icon.src}`;
-                }
-              })
-            }
-            res.send(data)
-          }).
-          catch(error =>{
-            console.warn("failed to fetch custom manifest for "+station+", using default manifest");
-            res.send(manifest);
-          });
-    
 
+        });
+ 
 
 });
 
-app.get('/', function (req, res) {
+app.use('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 

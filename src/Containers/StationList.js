@@ -1,39 +1,82 @@
 import React from "react";
-import xmlToJson from 'xmltojson';
+import Station from "../Components/Station";
 
+
+const storagePrefix = "https://galcomstorage.blob.core.windows.net/app-data";
+async function getStationJson(station){
+
+
+    return await fetch(`${storagePrefix}/stations/${station}/${station}.json`)
+            .then(res => res.json());
+}
 class StationList extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log("StationList constructor");
-    // set radio's initial state
-    this.state = {};
+    // set StationLists's initial state
+    this.state = {
+        stations: []
+    };
 
   }
 
   componentDidMount() {
-      const username="admin";
-      const password ="Galcom1995";
-      const url = "http://138.197.152.25:8000/admin/stats";
+    const self=this;
 
-    fetch(url, {
-            method:'GET', 
-            //headers: {'Authorization': 'Basic ' + window.btoa(username+":"+password)},
-         })
-        .then((result) => result.body)
-        .then((data) =>{
-            console.log("station list result: ",data);
-            const stationList = xmlToJson.parseString(data);
-            console.log("json station list: ",stationList);
+    fetch("/api/stationList")
+        .then(res => res.json())
+        .then((stations) =>{
+            //console.log("station list result: ",stations);
+            stations.filter(station =>{
+                    return station.type === "audio/mpeg";
+                })
+                .forEach(async station => {
+                    const info = await getStationJson(station.name);
+                    //console.log("station info: ",info);
+                    station.logoUrl = storagePrefix+ "/" + info.logo;
+                    station.website = info.website;
+                    station.displayName = info.name;
+                    station.description = info.description;
 
+                    
+                    self.setState({
+                        stations: self.state.stations.concat(station)
+                    })
 
+                    return station;
+                });
         });
  
   }
 
   render(){
+      var stationEls =  [];
+      //console.log("rendering StationList");
+      if(this.state.stations != null && this.state.stations.length > 0){
+          //console.log("num stations: "+this.state.stations.length)
+          stationEls = this.state.stations.map(station => {
+                return <Station
+                    key={station.name}
+                    logoUrl = {station.logoUrl}
+                    stationName = {station.name}
+                    website = {station.website}
+                    displayName = {station.displayName}
+                    description = {station.description}
+                />
+            });
+      }
+
       return (
-          <div>stub</div>
+        <div className="container">
+            <div className="row my-5">
+                <div className="col">
+                    <h2>Listen Live</h2>
+                </div>
+            </div>
+
+            {stationEls}
+
+        </div>
       );
 
   }

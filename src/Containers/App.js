@@ -7,7 +7,7 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <Route path="/" component={Radio} />
+        <Route path="/" exact component={Radio} />
         <Route path="/stationList" component={StationList} />
       </Router>
     )

@@ -1,0 +1,11 @@
+
+.btn-galcom {
+    color: white  !important;
+    background-color: #0693e3 !important;
+    border-radius: 1.55em !important;
+    padding: 0.667em 1.333em !important;
+}
+.station {
+    background-color: lightgray;
+    border-radius: 2em;
+}
