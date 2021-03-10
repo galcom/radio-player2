@@ -32,7 +32,7 @@ class StationList extends React.Component {
                 })
                 .forEach(async station => {
                     const info = await getStationJson(station.name);
-                    //console.log("station info: ",info);
+                    console.log("station info: ",info);
                     station.logoUrl = storagePrefix+ "/" + info.logo;
                     station.website = info.website;
                     station.displayName = info.name;
@@ -54,7 +54,12 @@ class StationList extends React.Component {
       //console.log("rendering StationList");
       if(this.state.stations != null && this.state.stations.length > 0){
           //console.log("num stations: "+this.state.stations.length)
-          stationEls = this.state.stations.map(station => {
+          stationEls = this.state.stations.sort((a,b) =>{
+              if(a.name < b.name) return -1;
+              else if(a.name > b.name) return 1;
+              else return 0;
+          })
+          .map(station => {
                 return <Station
                     key={station.name}
                     logoUrl = {station.logoUrl}
