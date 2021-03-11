@@ -25,6 +25,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon -i node_modules server.js",
+    "dev-start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject"
