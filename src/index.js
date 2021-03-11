@@ -9,8 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ReactDOM.render(<App />, document.getElementById('root'));
 
 //TEMPORARY enable this to clear old caches
-caches.keys().
-    then((names) =>{
+caches.keys()
+    .then((names) =>{
         console.log("cache keys: ",names);
         for (let name of names) {
             console.log("deleting cache "+name);
