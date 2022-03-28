@@ -80,7 +80,7 @@ class StationList extends React.Component {
             </div>
 
             <div className="row">
-                <div className="col d-flex flex-wrap">
+                <div className="col d-flex flex-wrap justify-content-center">
                     {stationEls}
                 </div>
             </div>

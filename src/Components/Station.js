@@ -18,7 +18,7 @@ class Station extends React.Component {
           websiteLink = <a href={this.props.website} target="_blank" rel="noopener noreferrer">Visit Station's Website</a>
       }
       return (
-        <div className="card flex-fill station" >
+        <div className="card flex-fill station " >
             <img className="card-img-top" src={this.props.logoUrl} alt="radio station logo"/>
             <div class="card-body">
                 <h5 class="card-title">{this.props.displayName}</h5>
