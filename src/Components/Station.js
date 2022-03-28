@@ -18,23 +18,22 @@ class Station extends React.Component {
           websiteLink = <a href={this.props.website} target="_blank" rel="noopener noreferrer">Visit Station's Website</a>
       }
       return (
-        <div className="row my-3 station">
-            <div className="col-lg-4 text-center">
-                <div className="logo">
-                    <img className="w-50 py-3" src={this.props.logoUrl} alt="radio station logo"/>
-                </div>
-            </div>
-            <div className="col-lg-8 py-3">
-                <h3>{this.props.displayName}</h3>
-                <p>
+        <div className="card flex-fill station" >
+            <img className="card-img-top" src={this.props.logoUrl} alt="radio station logo"/>
+            <div class="card-body">
+                <h5 class="card-title">{this.props.displayName}</h5>
+                <p class="cart-text">
                     {this.props.description}
                 </p>
-                <p>
+                <p class="cart-text">
                     {websiteLink}
                 </p>
-                <button onClick={this.openInWindowFn(this.props.stationName)} className="btn btn-galcom my-3" >Listen Now</button>
             </div>
+            <div class="card-footer text-center">
+                <button onClick={this.openInWindowFn(this.props.stationName)} 
+                        className="btn btn-galcom my-3" >Listen Now</button>
 
+            </div>
         </div>
       );
  

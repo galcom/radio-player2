@@ -6,6 +6,8 @@
     padding: 0.667em 1.333em !important;
 }
 .station {
-    background-color: lightgray;
-    border-radius: 2em;
+    /*background-color: lightgray;*/
+    /*border-radius: 2em;*/
+    width: 18rem;
+    margin: 3rem 1rem;
 }

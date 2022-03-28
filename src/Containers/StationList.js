@@ -79,7 +79,11 @@ class StationList extends React.Component {
                 </div>
             </div>
 
-            {stationEls}
+            <div className="row">
+                <div className="col d-flex flex-wrap">
+                    {stationEls}
+                </div>
+            </div>
 
         </div>
       );
