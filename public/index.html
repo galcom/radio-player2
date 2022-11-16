@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-98L41ZBM2V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag=gtag;
+      gtag('js', new Date());
+
+      gtag('config', 'G-98L41ZBM2V',{debug_mode:true});
+    </script>
+
     <meta charset="utf-8" />
     <!--<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />-->
 
@@ -63,7 +75,7 @@
           };
           try{
 
-            manifest = await fetch(`${storagePrefix}/stations/${station}/manifest.json`).
+            await fetch(`${storagePrefix}/stations/${station}/${station}.json`).
               then(res => res.json()). 
               then(data =>{
                 //console.log("found custom manifest: ",data);
@@ -73,12 +85,26 @@
                     if(icon.src != null){
                       icon.src = `${storagePrefix}/${icon.src}`;
                     }
-                  })
+                  });
+                  manifest.icons = data.icons;
+                }else if(data.logo != null && data.logo !== ""){
+                  var type;
+                  if(data.logo.endsWith(".png")) type="image/png";
+                  else if(data.logo.endsWith(".svg")) type="image/svg";
+                  else if(data.logo.endsWith(".webp")) type="image/webp";
+                  
+                  if(type!=null)
+                    manifest.icons = [
+                      {
+                        src: `${storagePrefix}/${data.logo}`,
+                        sizes: "256x256", // we just guess here
+                        type: type,
+                      }
+                    ];
                 }
-                //make start_url absolute since manifest URL is a Blob
-                data.start_url = prefix+data.start_url;
-                //console.log("updated manifest: ",data);
-                return data;
+                if(data.name != null) manifest.name=data.name;
+                if(data.foregroundColor != null) manifest.theme_color = data.foregroundColor;
+                if(data.backgroundColor != null) manifest.background_color = data.backgroundColor;
               });
           }catch(error){
             console.warn("failed to fetch custom manifest for "+station+", using default manifest",error);

@@ -9,7 +9,9 @@ class Player extends React.Component {
     return (
       <div id="wrapper" style={{ backgroundColor: this.props.backgroundColor }}>
         <div id="top">
-          <Logo logo={this.props.logo} />
+          <Logo logo={this.props.logo}
+                stationWebsite={this.props.stationWebsite} 
+          />
         </div>
         <div id="middle">
           <PlayerControl

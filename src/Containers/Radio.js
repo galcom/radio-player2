@@ -73,6 +73,7 @@ class Radio extends React.Component {
         }
     
         config["stationLogo"] = config["logo"];
+        config["stationWebsite"] = config["website"];
 
         config["isOnline"] = isOnline(); // is the device online
         config["isBroadcasting"] = true; // is the radio station broadcasting
@@ -121,10 +122,12 @@ class Radio extends React.Component {
     if (this.state.isPlaying === false) {
       // paused -> loading
       this.setState({ isPlaying: true });
+      window.gtag("event","play_start");
       console.log("User requested play.");
     } else {
       // loading/playing -> paused
       this.setState({ isPlaying: false });
+      window.gtag("event","play_stop");
       console.log("User requested pause.");
     }
   }
@@ -177,6 +180,7 @@ class Radio extends React.Component {
           streamUrl={this.state.streamUrl}
           logo={this.state.logo}
           stationLogo={this.state.logo}
+          stationWebsite={this.state.website}
           foregroundColor={this.state.foregroundColor}
           backgroundColor={this.state.backgroundColor}
           // player controls

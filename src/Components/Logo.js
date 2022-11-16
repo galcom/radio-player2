@@ -2,7 +2,12 @@ import React from "react";
 import "./Logo.css";
 
 function Logo(props) {
-  return <img src={props.logo} alt="logo" id="logo" />;
+  const img = <img src={props.logo} alt="logo" id="logo" />;
+  if(props.stationWebsite != null){
+
+    return <a href={props.stationWebsite} target="_blank" rel="noopener">{img}</a>;
+  }else
+    return  img;
 }
 
 export default Logo;
