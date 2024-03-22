@@ -126,14 +126,22 @@ class Radio extends React.Component {
       console.log("User requested play.");
     } else {
       // loading/playing -> paused
-      this.setState({ isPlaying: false });
+      this.setState({ 
+        isPlaying: false,
+        isReady: false,
+      });
       window.gtag("event","play_stop");
       console.log("User requested pause.");
     }
   }
 
   onError(error) {
-    console.log("Error playing " + this.state.streamUrl + ". "+error);
+
+    //we stop streaming by setting src to '', so ignore that error
+    if(error && error.target && error.target.getAttribute("src") === "")
+      return; 
+
+    console.log("Error playing " + this.state.streamUrl, error);
 
     // update isReady and isPlaying, to be safe (should already be false)
     this.setState({

@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('/api/stationList', function (req, res) {
   const username="admin";
   const password ="Galcom1995";
-  const url = "http://138.197.152.25:8000/admin/stats";
+  const url = "http://xstreamer.galcom.org:8000/admin/stats";
 
   fetch(url, {
             method:'GET', 

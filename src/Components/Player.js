@@ -5,6 +5,17 @@ import Footer from "./Footer";
 import PlayerControl from "./PlayerControl";
 
 class Player extends React.Component {
+
+
+  componentDidMount(){
+    console.log("Player mount, setting event listeners")
+    const audioEl = document.querySelector("audio");
+
+    audioEl.addEventListener("waiting",this.props.onBuffer);
+    audioEl.addEventListener("canplay",this.props.onReady);
+    audioEl.addEventListener("error",this.props.onError);
+  }
+
   render() {
     return (
       <div id="wrapper" style={{ backgroundColor: this.props.backgroundColor }}>
