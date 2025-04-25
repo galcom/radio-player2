@@ -26,6 +26,8 @@ function PlayerControl(props) {
 
   const noSource = "" //"javascript:void(0)"
   const filePlayer = <audio
+                      crossOrigin="anonymous"
+                      id="the-audio"  
                       src={props.streamUrl}
                       preload="auto"
                       autoPlay={true}

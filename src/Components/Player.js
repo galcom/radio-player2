@@ -10,23 +10,18 @@ class Player extends React.Component {
 
   componentDidMount(){
     console.log("Player mount, setting event listeners")
-    const audioEl = document.querySelector("audio");
+    const audioEl = document.getElementById("the-audio");
+    const meterEl = document.getElementById("peak-meter");
 
     audioEl.addEventListener("waiting",this.props.onBuffer);
     audioEl.addEventListener("canplay",this.props.onReady);
     audioEl.addEventListener("error",this.props.onError);
 
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    var peakMeter = null;
-    const meterEl = document.getElementById("peak-meter");
+
     const sourceNode = audioContext.createMediaElementSource(audioEl);
     sourceNode.connect(audioContext.destination);
-    peakMeter = new WebAudioPeakMeter(sourceNode,meterEl,{
-      //dbRangeMin:-40,
-      //dbRangeMax:40
-    });
-    //peakMeter  = createMeterNode(sourceNode,audioContext);
-    //createMeter(meterEl,peakMeter,{})
+    var peakMeter = new WebAudioPeakMeter(sourceNode,meterEl);
 
     audioEl.addEventListener("play", () => {
       console.log("play event");
@@ -61,8 +56,8 @@ class Player extends React.Component {
             onError={this.props.onError}
           />
 
-          <div id="peak-meter" style={{width:"400px"}} ></div>
         </div>
+        <div id="peak-meter" class="m-5" style={{height:"52px"}} ></div>
         <div id="footer">
           <Footer foregroundColor={this.props.foregroundColor} />
         </div>
