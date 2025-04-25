@@ -3,6 +3,7 @@ import "./Player.css";
 import Logo from "./Logo";
 import Footer from "./Footer";
 import PlayerControl from "./PlayerControl";
+import { WebAudioPeakMeter} from "web-audio-peak-meter";
 
 class Player extends React.Component {
 
@@ -14,6 +15,25 @@ class Player extends React.Component {
     audioEl.addEventListener("waiting",this.props.onBuffer);
     audioEl.addEventListener("canplay",this.props.onReady);
     audioEl.addEventListener("error",this.props.onError);
+
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    var peakMeter = null;
+    const meterEl = document.getElementById("peak-meter");
+    const sourceNode = audioContext.createMediaElementSource(audioEl);
+    sourceNode.connect(audioContext.destination);
+    peakMeter = new WebAudioPeakMeter(sourceNode,meterEl,{
+      //dbRangeMin:-40,
+      //dbRangeMax:40
+    });
+    //peakMeter  = createMeterNode(sourceNode,audioContext);
+    //createMeter(meterEl,peakMeter,{})
+
+    audioEl.addEventListener("play", () => {
+      console.log("play event");
+      audioContext.resume();
+    });
+    console.log("created new peak meter");
+  
   }
 
   render() {
@@ -40,6 +60,8 @@ class Player extends React.Component {
             togglePlaying={this.props.togglePlaying}
             onError={this.props.onError}
           />
+
+          <div id="peak-meter" style={{width:"400px"}} ></div>
         </div>
         <div id="footer">
           <Footer foregroundColor={this.props.foregroundColor} />

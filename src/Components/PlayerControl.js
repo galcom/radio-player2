@@ -30,7 +30,6 @@ function PlayerControl(props) {
                       preload="auto"
                       autoPlay={true}
                      />
-  
   const audioEl = document.querySelector("audio");
 
   // the 'audio' tag does not stop pulling data from source when paused.
@@ -94,10 +93,12 @@ function PlayerControl(props) {
           props.togglePlaying();
         }}
       />
-      {
-        //props.isPlaying ? filePlayer :null
-        filePlayer
-      }
+        {
+          //props.isPlaying ? filePlayer :null
+          <>
+            {filePlayer}
+          </>
+        }
     </React.Fragment>
   );
 }
