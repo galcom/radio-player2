@@ -11,7 +11,7 @@ class Player extends React.Component {
   componentDidMount(){
     console.log("Player mount, setting event listeners")
     const audioEl = document.getElementById("the-audio");
-    const meterEl = document.getElementById("peak-meter");
+    const meterEl = document.getElementById("peak_meter");
 
     audioEl.addEventListener("waiting",this.props.onBuffer);
     audioEl.addEventListener("canplay",this.props.onReady);
@@ -57,7 +57,9 @@ class Player extends React.Component {
           />
 
         </div>
-        <div id="peak-meter" class="m-5" style={{height:"52px"}} ></div>
+        <button class="btn btn-secondary mx-5 collapse show  meter-set" type="button" data-toggle="collapse" data-target=".meter-set">Show Meter</button>
+        <div id="peak_meter" class="meter-bar collapse m-5 meter-set " ></div>
+        <button class="btn btn-secondary mx-5 collapse meter-set " type="button" data-toggle="collapse" data-target=".meter-set">Hide Meter</button>
         <div id="footer">
           <Footer foregroundColor={this.props.foregroundColor} />
         </div>

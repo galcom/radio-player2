@@ -5,33 +5,7 @@ import "./PlayerControl.css";
 function PlayerControl(props) {
 
   //console.log("player props: ",props);
-  //const filePlayer =   <FilePlayer
-  //                      id="audio-wrapper"
-  //                      url={props.streamUrl}
-  //                      playing={props.isPlaying}
-  //                      config={{
-  //                        file: {
-  //                          forceAudio: true,
-  //                          autoplay: true,
-  //                        },
-  //                      }}
-  //                      onReady={() => {
-  //                        props.onReady();
-  //                      }}
-  //                      onBuffer={() => {
-  //                        props.onBuffer();
-  //                      }}
-  //                      onError={props.onError}
-  //                    />
-
-  const noSource = "" //"javascript:void(0)"
-  const filePlayer = <audio
-                      crossOrigin="anonymous"
-                      id="the-audio"  
-                      src={props.streamUrl}
-                      preload="auto"
-                      autoPlay={true}
-                     />
+  const noSource = "";
   const audioEl = document.querySelector("audio");
 
   // the 'audio' tag does not stop pulling data from source when paused.
@@ -63,15 +37,7 @@ function PlayerControl(props) {
           props.togglePlaying();
         }}
       />
-      {/* If we will use loading-ripple, below comment could be deleted 
-        <div
-        id="loading"
-        style={{ borderRight: "30px solid " + props.foregroundColor }}
-        className={props.isPlaying && !props.isReady ? "visible" : "hidden"}
-        onClick={() => {
-          props.togglePlaying();
-        }}
-      /> */}
+ 
       <div 
         id="loading-ripple"
         className={props.isPlaying && !props.isReady ? "visible" : "hidden"}
@@ -95,12 +61,13 @@ function PlayerControl(props) {
           props.togglePlaying();
         }}
       />
-        {
-          //props.isPlaying ? filePlayer :null
-          <>
-            {filePlayer}
-          </>
-        }
+      <audio
+        crossOrigin="anonymous"
+        id="the-audio"  
+        src={props.streamUrl}
+        preload="auto"
+        autoPlay={true}
+      />
     </React.Fragment>
   );
 }
