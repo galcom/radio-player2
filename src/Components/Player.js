@@ -57,9 +57,9 @@ class Player extends React.Component {
           />
 
         </div>
-        <button class="btn btn-secondary mx-5 collapse show  meter-set" type="button" data-toggle="collapse" data-target=".meter-set">Show Meter</button>
-        <div id="peak_meter" class="meter-bar collapse m-5 meter-set " ></div>
-        <button class="btn btn-secondary mx-5 collapse meter-set " type="button" data-toggle="collapse" data-target=".meter-set">Hide Meter</button>
+        <button class="btn btn-secondary m-5 collapse show  meter-set" type="button" data-toggle="collapse" data-target=".meter-set">Show Meter</button>
+        <div id="peak_meter" class="meter-bar collapse mt-5 mx-5 meter-set " ></div>
+        <button class="btn btn-secondary m-5 collapse meter-set " type="button" data-toggle="collapse" data-target=".meter-set">Hide Meter</button>
         <div id="footer">
           <Footer foregroundColor={this.props.foregroundColor} />
         </div>
