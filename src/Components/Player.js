@@ -14,7 +14,7 @@ class Player extends React.Component {
     const meterEl = document.getElementById("peak_meter");
 
     audioEl.addEventListener("waiting",this.props.onBuffer);
-    audioEl.addEventListener("canplay",this.props.onReady);
+    //audioEl.addEventListener("canplay",this.props.onReady);
     audioEl.addEventListener("error",this.props.onError);
 
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -25,6 +25,7 @@ class Player extends React.Component {
 
     audioEl.addEventListener("play", () => {
       console.log("play event");
+      this.props.onReady();
       audioContext.resume();
     });
     console.log("created new peak meter");
