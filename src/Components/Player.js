@@ -11,6 +11,44 @@ class Player extends React.Component {
     super(props);
     this.audioContext = null;
     this.audioElement = null;
+    this.sourceNode = null;
+    this.peakMeterInitialized = false;
+  }
+
+  initializePeakMeter() {
+    if (this.peakMeterInitialized || this.peakMeter) {
+      return; // Already initialized
+    }
+
+    const meterEl = document.getElementById("peak_meter");
+    
+    if (!meterEl || !this.sourceNode || !this.audioContext) {
+      return;
+    }
+
+    // Check if audioWorklet is available (requires HTTPS on mobile)
+    const audioWorklet = this.audioContext.audioWorklet || this.audioContext.webkitAudioWorklet;
+
+    if (audioWorklet && typeof audioWorklet.addModule === "function") {
+      try {
+        this.peakMeter = new WebAudioPeakMeter(this.sourceNode, meterEl);
+        this.peakMeterInitialized = true;
+        console.log("Peak meter initialized successfully");
+      } catch (err) {
+        console.warn("Failed to initialize peak meter:", err);
+        this.peakMeterInitialized = true; // Don't try again
+        // Hide the meter element if initialization fails
+        meterEl.style.display = "none";
+        const meterButtons = document.querySelectorAll(".meter-set");
+        meterButtons.forEach(btn => btn.style.display = "none");
+      }
+    } else {
+      // AudioWorklet not available (likely HTTP on mobile or unsupported browser)
+      this.peakMeterInitialized = true; // Don't try again
+      meterEl.style.display = "none";
+      const meterButtons = document.querySelectorAll(".meter-set");
+      meterButtons.forEach(btn => btn.style.display = "none");
+    }
   }
 
   componentDidMount(){
@@ -33,20 +71,19 @@ class Player extends React.Component {
 
     const sourceNode = this.audioContext.createMediaElementSource(audioEl);
     sourceNode.connect(this.audioContext.destination);
+    this.sourceNode = sourceNode;
 
-    if (meterEl && this.audioContext.audioWorklet && typeof this.audioContext.audioWorklet.addModule === "function") {
-      this.peakMeter = new WebAudioPeakMeter(sourceNode, meterEl);
-    } else if (!meterEl) {
-      console.warn("Peak meter element not found: #peak_meter");
-    } else {
-      console.warn("AudioWorklet not supported in this browser; peak meter disabled.");
-    }
+    // Try to initialize peak meter now (will work on desktop)
+    this.initializePeakMeter();
 
     audioEl.addEventListener("play", () => {
       console.log("play event fired");
       if (this.audioContext && this.audioContext.state === 'suspended') {
         console.log("Resuming suspended audio context");
-        this.audioContext.resume();
+        this.audioContext.resume().then(() => {
+          // Try to initialize peak meter after context resumes (for mobile)
+          this.initializePeakMeter();
+        });
       }
     });
 
@@ -68,6 +105,8 @@ class Player extends React.Component {
         console.log("Resuming suspended AudioContext");
         this.audioContext.resume().then(() => {
           console.log("AudioContext resumed successfully");
+          // Try to initialize peak meter after context resumes (for mobile)
+          this.initializePeakMeter();
         });
       }
       
