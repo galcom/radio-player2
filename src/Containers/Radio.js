@@ -77,7 +77,7 @@ class Radio extends React.Component {
 
         config["isOnline"] = isOnline(); // is the device online
         config["isBroadcasting"] = true; // is the radio station broadcasting
-        config["isPlaying"] = false; // is the audio playing
+        config["isPlaying"] = true; // attempt to autoplay on load
         config["isReady"] = false; // is the Player ready to play
 
         this.setState(config);
@@ -91,7 +91,7 @@ class Radio extends React.Component {
 
         config["isOnline"] = isOnline(); // is the device online
         config["isBroadcasting"] = false; // is the radio station broadcasting
-        config["isPlaying"] = false; // is the audio playing
+        config["isPlaying"] = false; // don't attempt to play if no station
         config["isReady"] = false; // is the Player ready to play
 
         this.setState(config);

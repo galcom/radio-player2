@@ -7,29 +7,88 @@ import { WebAudioPeakMeter} from "web-audio-peak-meter";
 
 class Player extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.audioContext = null;
+    this.audioElement = null;
+  }
 
   componentDidMount(){
     console.log("Player mount, setting event listeners")
     const audioEl = document.getElementById("the-audio");
     const meterEl = document.getElementById("peak_meter");
 
+    if (!audioEl) {
+      console.warn("Audio element not found: #the-audio");
+      return;
+    }
+
+    this.audioElement = audioEl;
+
     audioEl.addEventListener("waiting",this.props.onBuffer);
     //audioEl.addEventListener("canplay",this.props.onReady);
     audioEl.addEventListener("error",this.props.onError);
 
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    const sourceNode = audioContext.createMediaElementSource(audioEl);
-    sourceNode.connect(audioContext.destination);
-    var peakMeter = new WebAudioPeakMeter(sourceNode,meterEl);
+    const sourceNode = this.audioContext.createMediaElementSource(audioEl);
+    sourceNode.connect(this.audioContext.destination);
+
+    if (meterEl && this.audioContext.audioWorklet && typeof this.audioContext.audioWorklet.addModule === "function") {
+      this.peakMeter = new WebAudioPeakMeter(sourceNode, meterEl);
+    } else if (!meterEl) {
+      console.warn("Peak meter element not found: #peak_meter");
+    } else {
+      console.warn("AudioWorklet not supported in this browser; peak meter disabled.");
+    }
 
     audioEl.addEventListener("play", () => {
-      console.log("play event");
-      this.props.onReady();
-      audioContext.resume();
+      console.log("play event fired");
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        console.log("Resuming suspended audio context");
+        this.audioContext.resume();
+      }
     });
-    console.log("created new peak meter");
-  
+
+    audioEl.addEventListener("playing", () => {
+      console.log("playing event fired - audio is actually playing");
+      this.props.onReady();
+    });
+
+    console.log("Audio setup complete");
+  }
+
+  componentDidUpdate(prevProps) {
+    // When play is requested, ensure audio plays
+    if (this.props.isPlaying && !prevProps.isPlaying) {
+      console.log("Play requested - ensuring playback starts");
+      
+      // Resume AudioContext if suspended (must be done on user gesture)
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        console.log("Resuming suspended AudioContext");
+        this.audioContext.resume().then(() => {
+          console.log("AudioContext resumed successfully");
+        });
+      }
+      
+      // Only call play() if autoPlay didn't work and audio is still paused
+      // Use a small delay to let the src change and autoPlay attempt to work first
+      setTimeout(() => {
+        if (this.audioElement && this.audioElement.paused && this.props.isPlaying) {
+          console.log("AutoPlay didn't work, calling play() manually");
+          const playPromise = this.audioElement.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.warn("Failed to play audio:", err);
+              // If play fails, reset to paused state so play button shows
+              if (this.props.onError) {
+                this.props.onError(err);
+              }
+            });
+          }
+        }
+      }, 100);
+    }
   }
 
   render() {

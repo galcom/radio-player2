@@ -11,17 +11,17 @@ function PlayerControl(props) {
   // the 'audio' tag does not stop pulling data from source when paused.
   // So here we reset the 'src' attribute to force it to stop when play is paused,
   // then re-set it when play is resumed
-  if(audioEl != null){
+  if(audioEl !== null){
     const currentSrc = audioEl.getAttribute("src");
     //console.log("current src: "+currentSrc);
-    if(props.isPlaying && currentSrc != props.streamUrl){
+    if(props.isPlaying && currentSrc !== props.streamUrl){
       //console.log("IS playing");
+      // Just set the src, let autoPlay attribute handle playing
       audioEl.setAttribute("src",props.streamUrl); 
-      setTimeout(() =>audioEl.load());
-    }else if( ! props.isPlaying && currentSrc != noSource){
+    }else if( ! props.isPlaying && currentSrc !== noSource){
       //console.log("NOT playing");
       audioEl.setAttribute("src",noSource); //remove src value to stop streaming
-      setTimeout(() =>audioEl.load());
+      setTimeout(() => audioEl.load());
     }
   }
 
@@ -66,7 +66,7 @@ function PlayerControl(props) {
         id="the-audio"  
         src={props.streamUrl}
         preload="auto"
-        autoPlay={true}
+        autoPlay={props.isPlaying}
       />
     </React.Fragment>
   );
