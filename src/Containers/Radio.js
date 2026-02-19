@@ -154,7 +154,7 @@ class Radio extends React.Component {
       // internet connection lost
       this.setState({ isOnline: false, logo: "images/nointernet.png" });
       console.log("no internet logo displayed");
-    } else if(/NotAllowedError/.test(error)  ){
+    } else if(/NotAllowedError/.test(error) || /AudioContext/.test(error) ){
       //error is only caused by blocked attempt to autoplay, not a real error though
       console.log("failed to autoplay, user needs to interact with page first");
       return;

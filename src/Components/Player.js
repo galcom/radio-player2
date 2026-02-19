@@ -81,9 +81,20 @@ class Player extends React.Component {
       if (this.audioContext && this.audioContext.state === 'suspended') {
         console.log("Resuming suspended audio context");
         this.audioContext.resume().then(() => {
+          console.log("AudioContext resumed successfully");
           // Try to initialize peak meter after context resumes (for mobile)
           this.initializePeakMeter();
+        }).catch(err => {
+           console.warn("AudioContext resume failed",err);
         });
+
+        // If context is still suspended after a short delay, it means autoplay failed
+        setTimeout(() => {
+           if(this.audioContext && this.audioContext.state === 'suspended'){
+             console.warn("AudioContext execution suspended, stopping autoplay");
+             if(this.props.onError) this.props.onError(new Error("AudioContext suspended"));
+           }
+        },500);
       }
     });
 
